@@ -105,7 +105,13 @@ const recipe_info_value = (theme) => `
 const recipe_info_text = (theme) => `
     font-size: 20px;
     font-weight: ${theme.fontWeights.regular};
+    color: #C1C1C1;
+`;
+const recipe_summary = (theme) => `
+    font-size: 18px;
+    font-weight: ${theme.fontWeights.regular};
     color: #131313;
+    padding:10px;
 `;
 
 const variants = {
@@ -126,6 +132,7 @@ const variants = {
   recipe_title,
   recipe_info_text,
   recipe_info_value,
+  recipe_summary,
 };
 
 export const Text = styled.Text`

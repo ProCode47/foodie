@@ -8,10 +8,12 @@ import {
   RecipeImage,
   RecipeInfoRow,
   RecipeInfo,
+  IngredientRow,
 } from "../components/recipe.styles";
 import { Avatar } from "react-native-paper";
 import { ScrollView, View, ImageBackground } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { SingleIngredient } from "../components/SingleIngredient";
 
 export const RecipeScreen = ({ navigation }) => {
   return (
@@ -57,8 +59,17 @@ export const RecipeScreen = ({ navigation }) => {
           diet. A mixture of butter, salt, water, and a handful of other
           ingredients are all it takes to make this recipe so delicious. All
           things considered, we decided this recipe deserves a spoonacular score
-          of 46%. This score is solid.
+          of 46%. This score is solid. Try Crêpes Suzette, Crêpes Suzette, and Crepes Suzette for similar recipes.
         </Text>
+        <IngredientRow>
+          <Text variant="ingredients_header">Ingredients</Text>
+          <Text variant="ingredients_header_quantity">6 Items</Text>
+        </IngredientRow>
+        <ScrollView>
+          <SingleIngredient name="Eggs" quantity="3"/>
+          <SingleIngredient name="Bacon" quantity="5"/>
+          <SingleIngredient name="Pepper" quantity="7"/>
+        </ScrollView>
       </ScrollView>
     </SafeArea>
   );

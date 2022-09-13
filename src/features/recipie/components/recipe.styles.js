@@ -40,3 +40,20 @@ export const RecipeInfoRow = styled.View`
 export const RecipeInfo = styled.View`
   align-items: center;
 `;
+
+export const IngredientRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #EEEEEE;
+`;
+
+export const SingleIngredientRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+`;
+
+

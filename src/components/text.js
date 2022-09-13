@@ -92,9 +92,10 @@ const recipe_header = (theme) => `
 
 const recipe_title = (theme) => `
     font-size: 26px;
-    font-weight: ${theme.fontWeights.regular};
+    font-weight: ${theme.fontWeights.bold};
     color: #131313;
     margin:0 auto;
+    padding:10px;
 `;
 
 const recipe_info_value = (theme) => `
@@ -108,10 +109,25 @@ const recipe_info_text = (theme) => `
     color: #C1C1C1;
 `;
 const recipe_summary = (theme) => `
-    font-size: 18px;
+    font-size: 20px;
     font-weight: ${theme.fontWeights.regular};
     color: #131313;
     padding:10px;
+`;
+const ingredients_header = (theme) => `
+    font-size: 22px;
+    font-weight: ${theme.fontWeights.bold};
+    color: #131313;
+`;
+const ingredients_header_quantity = (theme) => `
+    font-size: 22px;
+    font-weight: ${theme.fontWeights.regular};
+    color: #13131399;
+`;
+const ingredients_item = (theme) => `
+    font-size: 20px;
+    font-weight: ${theme.fontWeights.regular};
+    color: #131313;
 `;
 
 const variants = {
@@ -133,6 +149,10 @@ const variants = {
   recipe_info_text,
   recipe_info_value,
   recipe_summary,
+  ingredients_header,
+    ingredients_item,
+    ingredients_header_quantity,
+  
 };
 
 export const Text = styled.Text`

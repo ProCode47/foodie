@@ -15,6 +15,7 @@ import {
 import { Avatar } from "react-native-paper";
 import { ScrollView, View, ImageBackground, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { Pressable } from "react-native";
 
 export const HomeScreen = ({ navigation }) => {
   const [popular, setPopular] = useState([]);
@@ -186,34 +187,55 @@ export const HomeScreen = ({ navigation }) => {
       <FlatList
         data={popular}
         renderItem={({ item }) => {
+          const stringSummary = String(item.summary);
+          const stringArray = stringSummary.split("spoonacular score of ")[1];
+          const stringArray2 = stringArray?.split("</b>")[0] || "50%";
+          const score = Number(stringArray2.match(/\d+/g)[0]);
+          const displayScore = score / 20;
           return (
-            <RecipeItem>
-              <ImageBackground
-                style={{ width: "100%", height: "100%" }}
-                source={{ uri: item.image }}
-              >
-                <LinearGradient
-                  colors={["#00000000", "#000000"]}
-                  style={{ height: "100%", width: "100%" }}
+            <Pressable
+              onPress={() =>
+                navigation.navigate("Recipe", {
+                  id: item.id,
+                  image: item.image,
+                  title: item.title,
+                  summary: item.summary,
+                })
+              }
+            >
+              <RecipeItem>
+                <ImageBackground
+                  style={{ width: "100%", height: "100%" }}
+                  source={{ uri: item.image }}
                 >
-                  <View style={{ position: "absolute", top: 25, right: 15 }}>
-                    <Text variant="card_rating">
-                      <Feather name="star" size={26} color={"#FFF"} /> 4.5
-                    </Text>
-                  </View>
-                  <View style={{ position: "absolute", bottom: 15, left: 15 }}>
-                    <Text variant="card_heading">{item.title}</Text>
-                    <Spacer position="top" size="medium" />
-                    <Row>
-                      <Feather name="clock" size={18} color={"#FFF"} />
-                      <Spacer position="left" size="medium">
-                        <Text variant="card_timer">15 min</Text>
-                      </Spacer>
-                    </Row>
-                  </View>
-                </LinearGradient>
-              </ImageBackground>
-            </RecipeItem>
+                  <LinearGradient
+                    colors={["#00000000", "#000000"]}
+                    style={{ height: "100%", width: "100%" }}
+                  >
+                    <View style={{ position: "absolute", top: 25, right: 15 }}>
+                      <Text variant="card_rating">
+                        <Feather name="star" size={26} color={"#FFF"} />{" "}
+                        {displayScore}
+                      </Text>
+                    </View>
+                    <View
+                      style={{ position: "absolute", bottom: 15, left: 15 }}
+                    >
+                      <Text variant="card_heading">{item.title}</Text>
+                      <Spacer position="top" size="medium" />
+                      <Row>
+                        <Feather name="clock" size={18} color={"#FFF"} />
+                        <Spacer position="left" size="medium">
+                          <Text variant="card_timer">
+                            {item.readyInMinutes} min
+                          </Text>
+                        </Spacer>
+                      </Row>
+                    </View>
+                  </LinearGradient>
+                </ImageBackground>
+              </RecipeItem>
+            </Pressable>
           );
         }}
         keyExtractor={(item) => item.name}

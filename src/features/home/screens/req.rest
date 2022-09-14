@@ -1,0 +1,1 @@
+GET https://api.spoonacular.com/recipes/random?apiKey=97a3d35ad8ce4f46a4fcdbdd6d25e69a&number=10

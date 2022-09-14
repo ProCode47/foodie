@@ -15,7 +15,24 @@ import { ScrollView, View, ImageBackground } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SingleIngredient } from "../components/SingleIngredient";
 
-export const RecipeScreen = ({ navigation }) => {
+export const RecipeScreen = ({ route, navigation }) => {
+  const [recipeObject, setRecipeObject] = useState({});
+  useEffect(() => {
+    // console.log(route.params.isbn);
+    const { id, image, title, summary } = route.params;
+    // console.log(route.params)
+    setRecipeObject({ id, image, title, summary });
+
+    // fetch(
+    //   `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${GOOGLE_API_KEY}`
+    // )
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     // console.log(res.items[0]);
+    //     setBook(res.items[0]);
+    //   })
+    //   .catch(console.error);
+  }, [route]);
   return (
     <SafeArea style={{ backgroundColor: "white" }}>
       <HeaderRow>
@@ -27,10 +44,10 @@ export const RecipeScreen = ({ navigation }) => {
         <RecipeImage>
           <ImageBackground
             style={{ width: "100%", height: "100%" }}
-            source={require("./food.jpg")}
+            source={{ uri: recipeObject.image }}
           />
         </RecipeImage>
-        <Text variant="recipe_title">Garnished Rice and Potatoes</Text>
+        <Text variant="recipe_title">{recipeObject.title}</Text>
         <Spacer position="top" size="medium" />
         <RecipeInfoRow>
           <RecipeInfo>
@@ -50,25 +67,15 @@ export const RecipeScreen = ({ navigation }) => {
             <Text variant="recipe_info_text">miutes</Text>
           </RecipeInfo>
         </RecipeInfoRow>
-        <Text variant="recipe_summary">
-          The recipe Crepes Suzette could satisfy your Mediterranean craving in
-          approximately 45 minutes. For 86 cents per serving, you get a morn
-          meal that serves 4. One serving contains 613 calories, 11g of protein,
-          and 39g of fat. A couple people made this recipe, and 45 would say it
-          hit the spot. It is a good option if you're following a vegetarian
-          diet. A mixture of butter, salt, water, and a handful of other
-          ingredients are all it takes to make this recipe so delicious. All
-          things considered, we decided this recipe deserves a spoonacular score
-          of 46%. This score is solid. Try Crêpes Suzette, Crêpes Suzette, and Crepes Suzette for similar recipes.
-        </Text>
+        <Text variant="recipe_summary">{recipeObject.summary}</Text>
         <IngredientRow>
           <Text variant="ingredients_header">Ingredients</Text>
           <Text variant="ingredients_header_quantity">6 Items</Text>
         </IngredientRow>
         <ScrollView>
-          <SingleIngredient name="Eggs" quantity="3"/>
-          <SingleIngredient name="Bacon" quantity="5"/>
-          <SingleIngredient name="Pepper" quantity="7"/>
+          <SingleIngredient name="Eggs" quantity="3" />
+          <SingleIngredient name="Bacon" quantity="5" />
+          <SingleIngredient name="Pepper" quantity="7" />
         </ScrollView>
       </ScrollView>
     </SafeArea>

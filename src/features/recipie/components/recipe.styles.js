@@ -56,4 +56,9 @@ export const SingleIngredientRow = styled.View`
   padding: 15px;
 `;
 
-
+export const TagRow = styled.View`
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px;
+`;

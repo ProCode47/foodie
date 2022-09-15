@@ -73,125 +73,15 @@ export const HomeScreen = ({ navigation }) => {
         </MealTagScroll>
       </View>
       <Spacer position="top" size="small" />
-      {/* <ScrollView>
-        <RecipeItem>
-          <ImageBackground
-            style={{ width: "100%", height: "100%" }}
-            source={require("./food.jpg")}
-          >
-            <LinearGradient
-              colors={["#00000000", "#000000"]}
-              style={{ height: "100%", width: "100%" }}
-            >
-              <View style={{ position: "absolute", top: 25, right: 15 }}>
-                <Text variant="card_rating">
-                  <Feather name="star" size={26} color={"#FFF"} /> 4.5
-                </Text>
-              </View>
-              <View style={{ position: "absolute", bottom: 15, left: 15 }}>
-                <Text variant="card_heading">Garnished Rice and Potatoes</Text>
-                <Spacer position="top" size="medium"/>
-                <Row>
-                  <Feather name="clock" size={18} color={"#FFF"} />
-                  <Spacer position="left" size="medium">
-                    <Text variant="card_timer">15 min</Text>
-                  </Spacer>
-                </Row>
-              </View>
-            </LinearGradient>
-          </ImageBackground>
-        </RecipeItem>
-        <RecipeItem>
-          <ImageBackground
-            style={{ width: "100%", height: "100%" }}
-            source={require("./food.jpg")}
-          >
-            <LinearGradient
-              colors={["#00000000", "#000000"]}
-              style={{ height: "100%", width: "100%" }}
-            >
-              <View style={{ position: "absolute", top: 25, right: 15 }}>
-                <Text variant="card_rating">
-                  <Feather name="star" size={26} color={"#FFF"} /> 4.5
-                </Text>
-              </View>
-              <View style={{ position: "absolute", bottom: 15, left: 15 }}>
-                <Text variant="card_heading">Garnished Rice and Potatoes</Text>
-                <Spacer position="top" size="medium"/>
-                <Row>
-                  <Feather name="clock" size={18} color={"#FFF"} />
-                  <Spacer position="left" size="medium">
-                    <Text variant="card_timer">15 min</Text>
-                  </Spacer>
-                </Row>
-              </View>
-            </LinearGradient>
-          </ImageBackground>
-        </RecipeItem>
-        <RecipeItem>
-          <ImageBackground
-            style={{ width: "100%", height: "100%" }}
-            source={require("./food.jpg")}
-          >
-            <LinearGradient
-              colors={["#00000000", "#000000"]}
-              style={{ height: "100%", width: "100%" }}
-            >
-              <View style={{ position: "absolute", top: 25, right: 15 }}>
-                <Text variant="card_rating">
-                  <Feather name="star" size={26} color={"#FFF"} /> 4.5
-                </Text>
-              </View>
-              <View style={{ position: "absolute", bottom: 15, left: 15 }}>
-                <Text variant="card_heading">Garnished Rice and Potatoes</Text>
-                <Spacer position="top" size="medium"/>
-                <Row>
-                  <Feather name="clock" size={18} color={"#FFF"} />
-                  <Spacer position="left" size="medium">
-                    <Text variant="card_timer">15 min</Text>
-                  </Spacer>
-                </Row>
-              </View>
-            </LinearGradient>
-          </ImageBackground>
-        </RecipeItem>
-        <RecipeItem>
-          <ImageBackground
-            style={{ width: "100%", height: "100%" }}
-            source={require("./food.jpg")}
-          >
-            <LinearGradient
-              colors={["#00000000", "#000000"]}
-              style={{ height: "100%", width: "100%" }}
-            >
-              <View style={{ position: "absolute", top: 25, right: 15 }}>
-                <Text variant="card_rating">
-                  <Feather name="star" size={26} color={"#FFF"} /> 4.5
-                </Text>
-              </View>
-              <View style={{ position: "absolute", bottom: 15, left: 15 }}>
-                <Text variant="card_heading">Garnished Rice and Potatoes</Text>
-                <Spacer position="top" size="medium"/>
-                <Row>
-                  <Feather name="clock" size={18} color={"#FFF"} />
-                  <Spacer position="left" size="medium">
-                    <Text variant="card_timer">15 min</Text>
-                  </Spacer>
-                </Row>
-              </View>
-            </LinearGradient>
-          </ImageBackground>
-        </RecipeItem>
-
-      </ScrollView> */}
       <FlatList
         data={popular}
         renderItem={({ item }) => {
           const stringSummary = String(item.summary);
           const stringArray = stringSummary.split("spoonacular score of ")[1];
-          const stringArray2 = stringArray?.split("</b>")[0] || "50%";
+          const stringArray2 = stringArray?.split("</b>")[0] || "65%";
           const score = Number(stringArray2.match(/\d+/g)[0]);
-          const displayScore = score / 20;
+          const convertedScore = score / 20;
+          const displayScore = Math.round(convertedScore * 10) / 10;
           return (
             <Pressable
               onPress={() =>
@@ -199,7 +89,11 @@ export const HomeScreen = ({ navigation }) => {
                   id: item.id,
                   image: item.image,
                   title: item.title,
-                  summary: item.summary,
+                  duration: item.readyInMinutes,
+                  servings: item.servings,
+                  price: item.pricePerServing,
+                  rating: displayScore,
+                  tags: item.dishTypes,
                 })
               }
             >

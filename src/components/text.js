@@ -96,6 +96,7 @@ const recipe_title = (theme) => `
     color: #131313;
     margin:0 auto;
     padding:10px;
+    text-align:center;
 `;
 
 const recipe_info_value = (theme) => `

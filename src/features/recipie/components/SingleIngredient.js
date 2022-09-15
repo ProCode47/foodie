@@ -4,10 +4,15 @@ import { Text } from "../../../components/text";
 import { View } from "react-native";
 import { Spacer } from "../../../components/spacer";
 
-export const SingleIngredient = ({ name, quantity }) => {
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+
+export const SingleIngredient = ({ name, quantity, unit }) => {
   return (
     <SingleIngredientRow>
-      <View style={{ flexDirection: "row" , alignItems:"center"}}>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Feather
           name="shopping-cart"
           size={22}
@@ -15,9 +20,11 @@ export const SingleIngredient = ({ name, quantity }) => {
           style={{ padding: 10, backgroundColor: "#f9616312", borderRadius: 5 }}
         />
         <Spacer position="left" size="large" />
-        <Text variant="ingredients_item">{name}</Text>
+        <Text variant="ingredients_item">{capitalizeFirstLetter(name)}</Text>
       </View>
-      <Text variant="ingredients_item">{quantity} pcs</Text>
+      <Text variant="ingredients_item">
+        {quantity} {unit ? unit : "pcs"}
+      </Text>
     </SingleIngredientRow>
   );
 };

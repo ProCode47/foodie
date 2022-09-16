@@ -16,19 +16,42 @@ import { Avatar } from "react-native-paper";
 import { ScrollView, View, ImageBackground, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Pressable } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const HomeScreen = ({ navigation }) => {
   const [popular, setPopular] = useState([]);
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('popular', jsonValue)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  
+const getData = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('popular')
+    return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch (e) {
+    console.log(e)
+    // error reading value
+  }
+}
+
 
   useEffect(() => {
     getPopular();
   }, []);
 
   const getPopular = async () => {
-    // const check = localStorage.getItem("popular");
+    const check = await getData();
 
-    if (false) {
-      setPopular(JSON.parse(check));
+    if (check) {
+      console.log("Check me out")
+      console.log(check)
+      setPopular(check);
     } else {
       try {
         const api = await fetch(
@@ -36,8 +59,8 @@ export const HomeScreen = ({ navigation }) => {
         );
         const data = await api.json();
         console.log(data.recipes);
-        // localStorage.setItem("popular", JSON.stringify(data.recipes));
         setPopular(data.recipes);
+        storeData(data.recipes)
       } catch (err) {
         console.log(err);
       }
@@ -64,12 +87,12 @@ export const HomeScreen = ({ navigation }) => {
       <Spacer position="top" size="medium" />
       <View style={{ flexShrink: 0 }}>
         <MealTagScroll>
-          <Text variant="mealtag">Breakfast</Text>
-          <Text variant="mealtag_active">Lunch</Text>
-          <Text variant="mealtag">Dinner</Text>
-          <Text variant="mealtag">Brunch</Text>
-          <Text variant="mealtag">Snacks</Text>
-          <Text variant="mealtag">Desserts</Text>
+          <Text variant="mealtag">Japanese</Text>
+          <Text variant="mealtag_active">African</Text>
+          <Text variant="mealtag">American</Text>
+          <Text variant="mealtag">Italian</Text>
+          <Text variant="mealtag">British</Text>
+          <Text variant="mealtag">Thai</Text>
         </MealTagScroll>
       </View>
       <Spacer position="top" size="small" />

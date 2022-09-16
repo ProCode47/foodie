@@ -3,6 +3,7 @@ import { SafeArea } from "../../../utility/safe-area";
 import { Text } from "../../../components/text";
 import { Spacer } from "../../../components/spacer";
 import { Feather } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   HeaderRow,
   RecipeImage,
@@ -13,6 +14,7 @@ import {
 } from "../components/recipe.styles";
 import { ScrollView, View, ImageBackground, FlatList } from "react-native";
 import { SingleIngredient } from "../components/SingleIngredient";
+import { List } from "react-native-paper";
 
 export const RecipeScreen = ({ route, navigation }) => {
   const fallbackState = {
@@ -27,6 +29,7 @@ export const RecipeScreen = ({ route, navigation }) => {
   };
   const [recipeObject, setRecipeObject] = useState({});
   const [details, setDetails] = useState({});
+  const [instructions, setInstructions] = useState("");
 
   useEffect(() => {
     // console.log(route.params);
@@ -56,6 +59,7 @@ export const RecipeScreen = ({ route, navigation }) => {
         );
         const detailData = await data.json();
         setDetails(detailData?.extendedIngredients);
+        setInstructions(detailData?.instructions.replace(/<\/?[^>]+(>|$)/g, ""));
         // console.log(detailData);
       };
       fetchDetails();
@@ -98,9 +102,9 @@ export const RecipeScreen = ({ route, navigation }) => {
             <Text variant="recipe_info_text">miutes</Text>
           </RecipeInfo>
         </RecipeInfoRow>
-        <View style={{padding:15}}>
-          <ScrollView horizontal={true}>
-            {recipeObject.tags.map((tag) => {
+        <View style={{ padding: 15 }}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {recipeObject?.tags?.map((tag) => {
               return <Text variant="mealtag_active">{tag}</Text>;
             })}
           </ScrollView>
@@ -108,7 +112,7 @@ export const RecipeScreen = ({ route, navigation }) => {
         <IngredientRow>
           <Text variant="ingredients_header">Ingredients</Text>
           <Text variant="ingredients_header_quantity">
-            {details.length} Items
+            {details?.length} Items
           </Text>
         </IngredientRow>
         <FlatList
@@ -124,6 +128,22 @@ export const RecipeScreen = ({ route, navigation }) => {
           }}
           keyExtractor={(item) => item.name}
         />
+        <List.Section>
+          <List.Accordion
+            title="Instructions"
+            theme={{ colors: { primary: '#131313' }}}
+            left={(props) => (
+              <MaterialCommunityIcons
+                name="chef-hat"
+                size={22}
+                color="#131313"
+                style={{padding:10}}
+              />
+            )}
+          >
+            <List.Item title={`${instructions}`} titleNumberOfLines={250} style={{paddingLeft:0}} />
+          </List.Accordion>
+        </List.Section>
       </ScrollView>
     </SafeArea>
   );

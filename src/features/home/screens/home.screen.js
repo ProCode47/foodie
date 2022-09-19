@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo} from "react";
 import { SafeArea } from "../../../utility/safe-area";
 import { Text } from "../../../components/text";
 import { Spacer } from "../../../components/spacer";
@@ -16,56 +16,116 @@ import { Avatar } from "react-native-paper";
 import { ScrollView, View, ImageBackground, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Pressable } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const HomeScreen = ({ navigation }) => {
-  const [popular, setPopular] = useState([]);
+  const initialTagState ={
+    Chinese: true,
+    African: false,
+    American: false,
+    Italian: false,
+    British: false,
+    Thai: false,
+  }
+  const defaultTagState = {
+    Chinese: false,
+    African: false,
+    American: false,
+    Italian: false,
+    British: false,
+    Thai: false,
+  }
+  const [recipeDisplay, setRecipeDisplay] = useState([]);
+  const [tagState, setTagState] = useState(initialTagState);
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const storeData = async (value) => {
     try {
-      const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem('popular', jsonValue)
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("Chinese", jsonValue);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
-  
-const getData = async () => {
-  try {
-    const jsonValue = await AsyncStorage.getItem('popular')
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
-  } catch (e) {
-    console.log(e)
-    // error reading value
-  }
-}
+  };
 
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("Chinese");
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      console.log(e);
+      // error reading value
+    }
+  };
 
-  useEffect(() => {
-    getPopular();
-  }, []);
+  const handleTagPress = async (tagname) => {
+    try {
+      const api = await fetch(
+        `https://api.spoonacular.com/recipes/complexSearch?apiKey=97a3d35ad8ce4f46a4fcdbdd6d25e69a&cuisine=${tagname}&number=10`
+      );
+      const data = await api.json();
+      // console.log(data.results);
+      setRecipeDisplay(data.results);
+    } catch (err) {
+      console.log(err);
+    }
 
-  const getPopular = async () => {
+    console.log(tagname);
+    const newTagState = { ...defaultTagState }
+    newTagState[tagname] = true
+    setTagState(newTagState)
+    console.log(newTagState)
+   
+  };
+  const getRecipeDisplay = async () => {
     const check = await getData();
 
     if (check) {
-      console.log("Check me out")
-      console.log(check)
-      setPopular(check);
+      // console.log(check)
+      setRecipeDisplay(check);
     } else {
       try {
         const api = await fetch(
-          `https://api.spoonacular.com/recipes/random?apiKey=97a3d35ad8ce4f46a4fcdbdd6d25e69a&number=10`
+          `https://api.spoonacular.com/recipes/complexSearch?apiKey=97a3d35ad8ce4f46a4fcdbdd6d25e69a&cuisine=Chinese&number=10`
         );
         const data = await api.json();
-        console.log(data.recipes);
-        setPopular(data.recipes);
-        storeData(data.recipes)
+        // console.log(data.results);
+        setRecipeDisplay(data.results);
+        storeData(data.results);
       } catch (err) {
         console.log(err);
       }
     }
   };
+  const handleSearch = async (searchKeyword) => {
+      try {
+        const api = await fetch(
+          `https://api.spoonacular.com/recipes/complexSearch?apiKey=97a3d35ad8ce4f46a4fcdbdd6d25e69a&query=${searchKeyword}&number=10`
+        );
+        const data = await api.json();
+        // console.log(data.results);
+        setRecipeDisplay(data.results);
+      } catch (err) {
+        console.log(err);
+      }
+  };
+
+
+  // const removeValue = async () => {
+  //   try {
+  //     await AsyncStorage.removeItem('Chinese')
+  //   } catch(e) {
+  //     // remove error
+  //   }
+  
+  //   console.log('Done.')
+  // }
+
+  useEffect(() => {
+    getRecipeDisplay();
+  }, []);
+
+  
   return (
     <SafeArea style={{ backgroundColor: "white" }}>
       <HeaderRow>
@@ -83,21 +143,41 @@ const getData = async () => {
         />
       </HeaderRow>
       <Spacer position="top" size="large" />
-      <Search />
+      <Search
+      value={searchKeyword}
+      onSubmitEditing={() => {
+        handleSearch(searchKeyword);
+      }}
+      onChangeText={(text) => {
+        setSearchKeyword(text);
+        }}
+      />
       <Spacer position="top" size="medium" />
       <View style={{ flexShrink: 0 }}>
         <MealTagScroll>
-          <Text variant="mealtag">Japanese</Text>
-          <Text variant="mealtag_active">African</Text>
-          <Text variant="mealtag">American</Text>
-          <Text variant="mealtag">Italian</Text>
-          <Text variant="mealtag">British</Text>
-          <Text variant="mealtag">Thai</Text>
+          <Pressable onPress={()=>handleTagPress("Chinese")}>
+            <Text variant={tagState.Chinese ? "mealtag_active" :"mealtag"}>Chinese</Text>
+          </Pressable>
+          <Pressable onPress={()=>handleTagPress("African")}>
+            <Text variant={tagState.African ? "mealtag_active" :"mealtag"}>African</Text>
+          </Pressable>
+          <Pressable onPress={()=>handleTagPress("American")}>
+            <Text variant={tagState.American ? "mealtag_active" :"mealtag"}>American</Text>
+          </Pressable>
+          <Pressable onPress={()=>handleTagPress("Italian")}>
+            <Text variant={tagState.Italian ? "mealtag_active" :"mealtag"}>Italian</Text>
+          </Pressable>
+          <Pressable onPress={()=>handleTagPress("British")}>
+            <Text variant={tagState.British ? "mealtag_active" :"mealtag"}>British</Text>
+          </Pressable>
+          <Pressable onPress={()=>handleTagPress("Thai")}>
+            <Text variant={tagState.Thai ? "mealtag_active" :"mealtag"}>Thai</Text>
+          </Pressable>
         </MealTagScroll>
       </View>
       <Spacer position="top" size="small" />
       <FlatList
-        data={popular}
+        data={recipeDisplay}
         renderItem={({ item }) => {
           const stringSummary = String(item.summary);
           const stringArray = stringSummary.split("spoonacular score of ")[1];

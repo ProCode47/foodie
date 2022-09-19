@@ -43,7 +43,6 @@ const List = () => {
 
 export const HomeNavigator = () => (
   <Tab.Navigator
-    initialRouteName="Recipe"
     screenOptions={createScreenOptions}
     tabBarOptions={{
       activeTintColor: colors.brand.primary,

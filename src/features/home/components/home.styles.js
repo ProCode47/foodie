@@ -55,7 +55,7 @@ export const WelcomeBar = styled.View`
   flex-direction: column;
 `;
 export const Search = styled(Searchbar).attrs({
-  placeholder: "Search by Recipes",
+  placeholder: "Search for recipes",
   placeholderTextColor: "#CDCDCD",
   iconColor: "#CDCDCD",
   selectionColor: colors.brand.primary,

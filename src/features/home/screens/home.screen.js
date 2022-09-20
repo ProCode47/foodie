@@ -19,6 +19,7 @@ import { Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const HomeScreen = ({ navigation }) => {
+  // spoonacular api not working for some reason ... Investigate tomorrow
   const initialTagState ={
     Chinese: true,
     African: false,

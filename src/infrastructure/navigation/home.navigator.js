@@ -10,7 +10,7 @@ const Tab = createBottomTabNavigator();
 const TAB_ICON = {
   Home: "home",
   Recipe: "list",
-  Settings: "settings",
+  Favourite: "heart",
 };
 
 const createScreenOptions = ({ route }) => {
@@ -51,6 +51,6 @@ export const HomeNavigator = () => (
   >
     <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Recipe" component={RecipeScreen} />
-    <Tab.Screen name="Settings" component={List} />
+    <Tab.Screen name="Favourite" component={List} />
   </Tab.Navigator>
 );

@@ -23,7 +23,7 @@ export const SingleIngredient = ({ name, quantity, unit }) => {
         <Text variant="ingredients_item">{capitalizeFirstLetter(name)}</Text>
       </View>
       <Text variant="ingredients_item">
-        {quantity} {unit ? unit : "pcs"}
+        {quantity} {unit === "<unit>" ? "pcs" : unit}
       </Text>
     </SingleIngredientRow>
   );

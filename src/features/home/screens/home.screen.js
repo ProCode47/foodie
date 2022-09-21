@@ -17,33 +17,35 @@ import { ScrollView, View, ImageBackground, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { APP_ID, APP_KEY } from "@env";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const HomeScreen = ({ navigation }) => {
-  // spoonacular api not working for some reason ... Investigate tomorrow
   const initialTagState ={
-    Chinese: true,
-    African: false,
+    Japanese: true,
+    French: false,
     American: false,
     Italian: false,
     British: false,
-    Thai: false,
+    Indian: false,
   }
   const defaultTagState = {
-    Chinese: false,
-    African: false,
+    Japanese: false,
+    French: false,
     American: false,
     Italian: false,
     British: false,
-    Thai: false,
+    Indian: false,
   }
   const [recipeDisplay, setRecipeDisplay] = useState([]);
   const [tagState, setTagState] = useState(initialTagState);
   const [searchKeyword, setSearchKeyword] = useState("");
+  
 
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem("Chinese", jsonValue);
+      await AsyncStorage.setItem("Cache", jsonValue);
     } catch (e) {
       console.log(e);
     }
@@ -51,7 +53,7 @@ export const HomeScreen = ({ navigation }) => {
 
   const getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem("Chinese");
+      const jsonValue = await AsyncStorage.getItem("Cache");
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       console.log(e);
@@ -60,23 +62,21 @@ export const HomeScreen = ({ navigation }) => {
   };
 
   const handleTagPress = async (tagname) => {
-    try {
-      const api = await fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?apiKey=97a3d35ad8ce4f46a4fcdbdd6d25e69a&cuisine=${tagname}&number=10`
-      );
-      const data = await api.json();
-      // console.log(data.results);
-      setRecipeDisplay(data.results);
-    } catch (err) {
-      console.log(err);
-    }
-
-    console.log(tagname);
     const newTagState = { ...defaultTagState }
     newTagState[tagname] = true
     setTagState(newTagState)
-    console.log(newTagState)
-   
+    setRecipeDisplay([]);
+    try {
+      const api = await fetch(
+        `https://api.edamam.com/api/recipes/v2?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&cuisineType=${tagname}`
+      );
+      const data = await api.json();
+      // console.log(data.results);
+      setRecipeDisplay(data.hits);
+    } catch (err) {
+      console.log(err);
+    }
+    
   };
   const getRecipeDisplay = async () => {
     const check = await getData();
@@ -87,25 +87,26 @@ export const HomeScreen = ({ navigation }) => {
     } else {
       try {
         const api = await fetch(
-          `https://api.spoonacular.com/recipes/complexSearch?apiKey=97a3d35ad8ce4f46a4fcdbdd6d25e69a&cuisine=Chinese&number=10`
+          `https://api.edamam.com/api/recipes/v2?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&cuisineType=Japanese`
         );
         const data = await api.json();
         // console.log(data.results);
-        setRecipeDisplay(data.results);
-        storeData(data.results);
+        setRecipeDisplay(data.hits);
+        storeData(data.hits);
       } catch (err) {
         console.log(err);
       }
     }
   };
   const handleSearch = async (searchKeyword) => {
+    setRecipeDisplay([]);
       try {
         const api = await fetch(
-          `https://api.spoonacular.com/recipes/complexSearch?apiKey=97a3d35ad8ce4f46a4fcdbdd6d25e69a&query=${searchKeyword}&number=10`
+          `https://api.edamam.com/api/recipes/v2?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&q=${searchKeyword}`
         );
         const data = await api.json();
         // console.log(data.results);
-        setRecipeDisplay(data.results);
+        setRecipeDisplay(data.hits);
       } catch (err) {
         console.log(err);
       }
@@ -131,7 +132,7 @@ export const HomeScreen = ({ navigation }) => {
     <SafeArea style={{ backgroundColor: "white" }}>
       <HeaderRow>
         <WelcomeBar>
-          <Text variant="welcomebar_heading"> Hello, Victor 👋</Text>
+          <Text variant="welcomebar_heading"> Hello there 👋</Text>
           <Spacer position="top" />
           <Text variant="welcomebar_caption">
             What do you want to cook today?
@@ -156,11 +157,11 @@ export const HomeScreen = ({ navigation }) => {
       <Spacer position="top" size="medium" />
       <View style={{ flexShrink: 0 }}>
         <MealTagScroll>
-          <Pressable onPress={()=>handleTagPress("Chinese")}>
-            <Text variant={tagState.Chinese ? "mealtag_active" :"mealtag"}>Chinese</Text>
+          <Pressable onPress={()=>handleTagPress("Japanese")}>
+            <Text variant={tagState.Japanese ? "mealtag_active" :"mealtag"}>Japanese</Text>
           </Pressable>
-          <Pressable onPress={()=>handleTagPress("African")}>
-            <Text variant={tagState.African ? "mealtag_active" :"mealtag"}>African</Text>
+          <Pressable onPress={()=>handleTagPress("French")}>
+            <Text variant={tagState.French ? "mealtag_active" :"mealtag"}>French</Text>
           </Pressable>
           <Pressable onPress={()=>handleTagPress("American")}>
             <Text variant={tagState.American ? "mealtag_active" :"mealtag"}>American</Text>
@@ -171,8 +172,8 @@ export const HomeScreen = ({ navigation }) => {
           <Pressable onPress={()=>handleTagPress("British")}>
             <Text variant={tagState.British ? "mealtag_active" :"mealtag"}>British</Text>
           </Pressable>
-          <Pressable onPress={()=>handleTagPress("Thai")}>
-            <Text variant={tagState.Thai ? "mealtag_active" :"mealtag"}>Thai</Text>
+          <Pressable onPress={()=>handleTagPress("Indian")}>
+            <Text variant={tagState.Indian ? "mealtag_active" :"mealtag"}>Indian</Text>
           </Pressable>
         </MealTagScroll>
       </View>
@@ -180,52 +181,41 @@ export const HomeScreen = ({ navigation }) => {
       <FlatList
         data={recipeDisplay}
         renderItem={({ item }) => {
-          const stringSummary = String(item.summary);
-          const stringArray = stringSummary.split("spoonacular score of ")[1];
-          const stringArray2 = stringArray?.split("</b>")[0] || "65%";
-          const score = Number(stringArray2.match(/\d+/g)[0]);
-          const convertedScore = score / 20;
-          const displayScore = Math.round(convertedScore * 10) / 10;
           return (
             <Pressable
               onPress={() =>
                 navigation.navigate("Recipe", {
-                  id: item.id,
-                  image: item.image,
-                  title: item.title,
-                  duration: item.readyInMinutes,
-                  servings: item.servings,
-                  price: item.pricePerServing,
-                  rating: displayScore,
-                  tags: item.dishTypes,
+                  image: item.recipe.image,
+                  title: item.recipe.label,
+                  servings: item.recipe.yield,
+                  calories: Math.floor(item.recipe.calories),
+                  weight: Math.floor(item.recipe.totalWeight),
+                  tags: [...item.recipe.mealType, ...item.recipe.dishType],
+                  ingredients:item.recipe.ingredients,
                 })
               }
             >
               <RecipeItem>
                 <ImageBackground
                   style={{ width: "100%", height: "100%" }}
-                  source={{ uri: item.image }}
+                  source={{ uri: item.recipe.image }}
                 >
                   <LinearGradient
                     colors={["#00000000", "#000000"]}
                     style={{ height: "100%", width: "100%" }}
                   >
                     <View style={{ position: "absolute", top: 25, right: 15 }}>
-                      <Text variant="card_rating">
-                        <Feather name="star" size={26} color={"#FFF"} />{" "}
-                        {displayScore}
-                      </Text>
                     </View>
                     <View
                       style={{ position: "absolute", bottom: 15, left: 15 }}
                     >
-                      <Text variant="card_heading">{item.title}</Text>
-                      <Spacer position="top" size="medium" />
+                      <Text variant="card_heading">{item.recipe.label}</Text>
+                      <Spacer position="top" size="large" />
                       <Row>
-                        <Feather name="clock" size={18} color={"#FFF"} />
+                        <MaterialCommunityIcons name="silverware-fork-knife" size={20} color={"#FFF"} />
                         <Spacer position="left" size="medium">
                           <Text variant="card_timer">
-                            {item.readyInMinutes} min
+                            { Math.floor(item.recipe.calories)} kcal
                           </Text>
                         </Spacer>
                       </Row>
@@ -236,7 +226,7 @@ export const HomeScreen = ({ navigation }) => {
             </Pressable>
           );
         }}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.recipe.label}
       />
     </SafeArea>
   );

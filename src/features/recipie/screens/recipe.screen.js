@@ -18,55 +18,38 @@ import { List } from "react-native-paper";
 
 export const RecipeScreen = ({ route, navigation }) => {
   const fallbackState = {
-    id: "663313",
-    image: "https://spoonacular.com/recipeImages/663313-556x370.jpg",
-    title: "The Pearhattan Cocktail",
-    rating: "4.5",
-    duration: "90",
+    image:
+      "http://www.edamam.com/ontologies/edamam.owl#recipe_b79327d05b8e5b838ad6cfd9576b30b6",
+    title: "Chicken Vesuvio",
+    calories: "1200",
     servings: "2",
-    price: "45",
+    fat: "450",
+    ingredients: [],
     tags: ["Breakfast", "Fast", "Easy"],
   };
   const [recipeObject, setRecipeObject] = useState({});
   const [details, setDetails] = useState({});
-  const [instructions, setInstructions] = useState("");
 
   useEffect(() => {
     // console.log(route.params);
     if (route.params) {
-      const { id, image, title, rating, duration, servings, price, tags } =
+      const { image, title, calories, servings, weight, tags, ingredients } =
         route.params;
+      
+      console.log(ingredients)
       setRecipeObject({
-        id,
         image,
         title,
-        rating,
-        duration,
+        calories,
         servings,
-        price,
+        weight,
         tags,
       });
+      setDetails(ingredients);
     } else {
       setRecipeObject(fallbackState);
     }
   }, [route]);
-
-  useEffect(() => {
-    try {
-      const fetchDetails = async () => {
-        const data = await fetch(
-          `https://api.spoonacular.com/recipes/${recipeObject.id}/information?apiKey=97a3d35ad8ce4f46a4fcdbdd6d25e69a`
-        );
-        const detailData = await data.json();
-        setDetails(detailData?.extendedIngredients);
-        setInstructions(detailData?.instructions.replace(/<\/?[^>]+(>|$)/g, ""));
-        // console.log(detailData);
-      };
-      fetchDetails();
-    } catch (err) {
-      console.log({ err });
-    }
-  }, [recipeObject.id]);
 
   return (
     <SafeArea style={{ backgroundColor: "white" }}>
@@ -90,16 +73,12 @@ export const RecipeScreen = ({ route, navigation }) => {
             <Text variant="recipe_info_text">servings</Text>
           </RecipeInfo>
           <RecipeInfo>
-            <Text variant="recipe_info_value">${recipeObject.price}</Text>
-            <Text variant="recipe_info_text">price</Text>
+            <Text variant="recipe_info_value">{recipeObject.calories}</Text>
+            <Text variant="recipe_info_text">kcal</Text>
           </RecipeInfo>
           <RecipeInfo>
-            <Text variant="recipe_info_value">{recipeObject.rating}</Text>
-            <Text variant="recipe_info_text">rating</Text>
-          </RecipeInfo>
-          <RecipeInfo>
-            <Text variant="recipe_info_value">{recipeObject.duration}</Text>
-            <Text variant="recipe_info_text">miutes</Text>
+            <Text variant="recipe_info_value">{recipeObject.weight}</Text>
+            <Text variant="recipe_info_text">grams</Text>
           </RecipeInfo>
         </RecipeInfoRow>
         <View style={{ padding: 15 }}>
@@ -120,30 +99,14 @@ export const RecipeScreen = ({ route, navigation }) => {
           renderItem={({ item }) => {
             return (
               <SingleIngredient
-                name={item.nameClean}
-                quantity={item.amount}
-                unit={item.unit}
+                name={item.food}
+                quantity={item.quantity}
+                unit={item.measure}
               />
             );
           }}
           keyExtractor={(item) => item.name}
         />
-        <List.Section>
-          <List.Accordion
-            title="Instructions"
-            theme={{ colors: { primary: '#131313' }}}
-            left={(props) => (
-              <MaterialCommunityIcons
-                name="chef-hat"
-                size={22}
-                color="#131313"
-                style={{padding:10}}
-              />
-            )}
-          >
-            <List.Item title={`${instructions}`} titleNumberOfLines={250} style={{paddingLeft:0}} />
-          </List.Accordion>
-        </List.Section>
       </ScrollView>
     </SafeArea>
   );

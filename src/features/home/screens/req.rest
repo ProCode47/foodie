@@ -1,1 +1,1 @@
-GET https://api.spoonacular.com/recipes/complexSearch?apiKey=97a3d35ad8ce4f46a4fcdbdd6d25e69a&cuisine=Chinese&number=10
+GET https://api.edamam.com/api/recipes/v2?type=public&q=chicken&app_id=49895665&app_key=2facef1175704a26f43a929745bb17f8

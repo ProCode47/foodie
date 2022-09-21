@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 import { colors } from "../../infrastructure/theme/colors";
 import { HomeScreen } from "../../features/home/screens/home.screen";
+import { FavouriteScreen } from "../../features/home/screens/favourites.screen";
 import { RecipeScreen } from "../../features/recipie/screens/recipe.screen";
 
 const Tab = createBottomTabNavigator();
@@ -51,6 +52,6 @@ export const HomeNavigator = () => (
   >
     <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Recipe" component={RecipeScreen} />
-    <Tab.Screen name="Favourite" component={List} />
+    <Tab.Screen name="Favourite" component={FavouriteScreen} />
   </Tab.Navigator>
 );

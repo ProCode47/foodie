@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo} from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { SafeArea } from "../../../utility/safe-area";
 import { Text } from "../../../components/text";
 import { Spacer } from "../../../components/spacer";
@@ -18,17 +18,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { APP_ID, APP_KEY } from "@env";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export const HomeScreen = ({ navigation }) => {
-  const initialTagState ={
+  const initialTagState = {
     Japanese: true,
     French: false,
     American: false,
     Italian: false,
     British: false,
     Indian: false,
-  }
+  };
   const defaultTagState = {
     Japanese: false,
     French: false,
@@ -36,24 +36,23 @@ export const HomeScreen = ({ navigation }) => {
     Italian: false,
     British: false,
     Indian: false,
-  }
+  };
   const [recipeDisplay, setRecipeDisplay] = useState([]);
   const [tagState, setTagState] = useState(initialTagState);
   const [searchKeyword, setSearchKeyword] = useState("");
-  
 
-  const storeData = async (value) => {
+  const storeData = async (value, location) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem("Cache", jsonValue);
+      await AsyncStorage.setItem(location, jsonValue);
     } catch (e) {
       console.log(e);
     }
   };
 
-  const getData = async () => {
+  const getData = async (location) => {
     try {
-      const jsonValue = await AsyncStorage.getItem("Cache");
+      const jsonValue = await AsyncStorage.getItem(location);
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (e) {
       console.log(e);
@@ -62,9 +61,9 @@ export const HomeScreen = ({ navigation }) => {
   };
 
   const handleTagPress = async (tagname) => {
-    const newTagState = { ...defaultTagState }
-    newTagState[tagname] = true
-    setTagState(newTagState)
+    const newTagState = { ...defaultTagState };
+    newTagState[tagname] = true;
+    setTagState(newTagState);
     setRecipeDisplay([]);
     try {
       const api = await fetch(
@@ -76,10 +75,9 @@ export const HomeScreen = ({ navigation }) => {
     } catch (err) {
       console.log(err);
     }
-    
   };
   const getRecipeDisplay = async () => {
-    const check = await getData();
+    const check = await getData("Cache");
 
     if (check) {
       // console.log(check)
@@ -92,7 +90,7 @@ export const HomeScreen = ({ navigation }) => {
         const data = await api.json();
         // console.log(data.results);
         setRecipeDisplay(data.hits);
-        storeData(data.hits);
+        await storeData(data.hits, "Cache");
       } catch (err) {
         console.log(err);
       }
@@ -100,18 +98,35 @@ export const HomeScreen = ({ navigation }) => {
   };
   const handleSearch = async (searchKeyword) => {
     setRecipeDisplay([]);
-      try {
-        const api = await fetch(
-          `https://api.edamam.com/api/recipes/v2?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&q=${searchKeyword}`
-        );
-        const data = await api.json();
-        // console.log(data.results);
-        setRecipeDisplay(data.hits);
-      } catch (err) {
-        console.log(err);
-      }
+    try {
+      const api = await fetch(
+        `https://api.edamam.com/api/recipes/v2?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&q=${searchKeyword}`
+      );
+      const data = await api.json();
+      // console.log(data.results);
+      setRecipeDisplay(data.hits);
+    } catch (err) {
+      console.log(err);
+    }
   };
-
+  const handleFavourite = async (link) => {
+    try {
+      const api = await fetch(
+        `${link}`
+      );
+      const data = await api.json();
+      const favourites = await getData("Favourites")
+      if (favourites === null) {
+        const favourites = []
+        const updatedFavourites = favourites.push(data)
+        await storeData(updatedFavourites, "Favourites");
+      }
+      const updatedFavourites = [...favourites,data]
+      await storeData(updatedFavourites, "Favourites");
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   // const removeValue = async () => {
   //   try {
@@ -119,7 +134,7 @@ export const HomeScreen = ({ navigation }) => {
   //   } catch(e) {
   //     // remove error
   //   }
-  
+
   //   console.log('Done.')
   // }
 
@@ -127,53 +142,64 @@ export const HomeScreen = ({ navigation }) => {
     getRecipeDisplay();
   }, []);
 
-  
   return (
     <SafeArea style={{ backgroundColor: "white" }}>
       <HeaderRow>
         <WelcomeBar>
-          <Text variant="welcomebar_heading"> Hello there 👋</Text>
+          <Text variant="welcomebar_heading">Hello there 👋</Text>
           <Spacer position="top" />
           <Text variant="welcomebar_caption">
             What do you want to cook today?
           </Text>
         </WelcomeBar>
         <Avatar.Image
-          size={52}
-          style={{ backgroundColor: "white" }}
-          source={require("../../../../assets/avatar.png")}
+          size={50}
+          style={{ backgroundColor: "#f9616300"}}
+          source={require("../../../../assets/avatarfemale.png")}
         />
       </HeaderRow>
       <Spacer position="top" size="large" />
       <Search
-      value={searchKeyword}
-      onSubmitEditing={() => {
-        handleSearch(searchKeyword);
-      }}
-      onChangeText={(text) => {
-        setSearchKeyword(text);
+        value={searchKeyword}
+        onSubmitEditing={() => {
+          handleSearch(searchKeyword);
+        }}
+        onChangeText={(text) => {
+          setSearchKeyword(text);
         }}
       />
       <Spacer position="top" size="medium" />
       <View style={{ flexShrink: 0 }}>
         <MealTagScroll>
-          <Pressable onPress={()=>handleTagPress("Japanese")}>
-            <Text variant={tagState.Japanese ? "mealtag_active" :"mealtag"}>Japanese</Text>
+          <Pressable onPress={() => handleTagPress("Japanese")}>
+            <Text variant={tagState.Japanese ? "mealtag_active" : "mealtag"}>
+              Japanese
+            </Text>
           </Pressable>
-          <Pressable onPress={()=>handleTagPress("French")}>
-            <Text variant={tagState.French ? "mealtag_active" :"mealtag"}>French</Text>
+          <Pressable onPress={() => handleTagPress("French")}>
+            <Text variant={tagState.French ? "mealtag_active" : "mealtag"}>
+              French
+            </Text>
           </Pressable>
-          <Pressable onPress={()=>handleTagPress("American")}>
-            <Text variant={tagState.American ? "mealtag_active" :"mealtag"}>American</Text>
+          <Pressable onPress={() => handleTagPress("American")}>
+            <Text variant={tagState.American ? "mealtag_active" : "mealtag"}>
+              American
+            </Text>
           </Pressable>
-          <Pressable onPress={()=>handleTagPress("Italian")}>
-            <Text variant={tagState.Italian ? "mealtag_active" :"mealtag"}>Italian</Text>
+          <Pressable onPress={() => handleTagPress("Italian")}>
+            <Text variant={tagState.Italian ? "mealtag_active" : "mealtag"}>
+              Italian
+            </Text>
           </Pressable>
-          <Pressable onPress={()=>handleTagPress("British")}>
-            <Text variant={tagState.British ? "mealtag_active" :"mealtag"}>British</Text>
+          <Pressable onPress={() => handleTagPress("British")}>
+            <Text variant={tagState.British ? "mealtag_active" : "mealtag"}>
+              British
+            </Text>
           </Pressable>
-          <Pressable onPress={()=>handleTagPress("Indian")}>
-            <Text variant={tagState.Indian ? "mealtag_active" :"mealtag"}>Indian</Text>
+          <Pressable onPress={() => handleTagPress("Indian")}>
+            <Text variant={tagState.Indian ? "mealtag_active" : "mealtag"}>
+              Indian
+            </Text>
           </Pressable>
         </MealTagScroll>
       </View>
@@ -191,7 +217,7 @@ export const HomeScreen = ({ navigation }) => {
                   calories: Math.floor(item.recipe.calories),
                   weight: Math.floor(item.recipe.totalWeight),
                   tags: [...item.recipe.mealType, ...item.recipe.dishType],
-                  ingredients:item.recipe.ingredients,
+                  ingredients: item.recipe.ingredients,
                 })
               }
             >
@@ -205,6 +231,7 @@ export const HomeScreen = ({ navigation }) => {
                     style={{ height: "100%", width: "100%" }}
                   >
                     <View style={{ position: "absolute", top: 25, right: 15 }}>
+                      <Feather onPress={()=> handleFavourite(item._links.self.href)} name="heart" size={24} color={"#FFF"} />
                     </View>
                     <View
                       style={{ position: "absolute", bottom: 15, left: 15 }}
@@ -212,10 +239,14 @@ export const HomeScreen = ({ navigation }) => {
                       <Text variant="card_heading">{item.recipe.label}</Text>
                       <Spacer position="top" size="large" />
                       <Row>
-                        <MaterialCommunityIcons name="silverware-fork-knife" size={20} color={"#FFF"} />
+                        <MaterialCommunityIcons
+                          name="silverware-fork-knife"
+                          size={20}
+                          color={"#FFF"}
+                        />
                         <Spacer position="left" size="medium">
                           <Text variant="card_timer">
-                            { Math.floor(item.recipe.calories)} kcal
+                            {Math.floor(item.recipe.calories)} kcal
                           </Text>
                         </Spacer>
                       </Row>

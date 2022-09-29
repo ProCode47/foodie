@@ -106,7 +106,7 @@ export const FavouriteScreen = ({ navigation, route }) => {
                     style={{ height: "100%", width: "100%" }}
                   >
                     <View style={{ position: "absolute", top: 25, right: 15 }}>
-                      <Feather onPress={()=> handleFavourite(item._links.self.href)} name="heart" size={24} color={"#FFF"} />
+                      <Feather onPress={()=> handleFavourite(item._links.self.href)} name="heart" size={24} color={"red"} />
                     </View>
                     <View
                       style={{ position: "absolute", bottom: 15, left: 15 }}

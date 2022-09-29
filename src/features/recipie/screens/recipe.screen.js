@@ -14,20 +14,10 @@ import {
 } from "../components/recipe.styles";
 import { ScrollView, View, ImageBackground, FlatList } from "react-native";
 import { SingleIngredient } from "../components/SingleIngredient";
-import { List } from "react-native-paper";
 
 export const RecipeScreen = ({ route, navigation }) => {
-  const fallbackState = {
-    image:
-      "http://www.edamam.com/ontologies/edamam.owl#recipe_b79327d05b8e5b838ad6cfd9576b30b6",
-    title: "Chicken Vesuvio",
-    calories: "1200",
-    servings: "2",
-    fat: "450",
-    ingredients: [],
-    tags: ["Breakfast", "Fast", "Easy"],
-  };
   const [recipeObject, setRecipeObject] = useState({});
+  const [existingRecipe, setExistingRecipe] = useState(false);
   const [details, setDetails] = useState({});
 
   useEffect(() => {
@@ -46,8 +36,9 @@ export const RecipeScreen = ({ route, navigation }) => {
         tags,
       });
       setDetails(ingredients);
+      setExistingRecipe(true)
     } else {
-      setRecipeObject(fallbackState);
+      setExistingRecipe(false)
     }
   }, [route]);
 
@@ -58,7 +49,7 @@ export const RecipeScreen = ({ route, navigation }) => {
         <Text variant="recipe_header">Recipe</Text>
         <Feather name="more-vertical" size={26} color={"#000"} />
       </HeaderRow>
-      <ScrollView>
+   { existingRecipe ?  <ScrollView>
         <RecipeImage>
           <ImageBackground
             style={{ width: "100%", height: "100%" }}
@@ -107,7 +98,7 @@ export const RecipeScreen = ({ route, navigation }) => {
           }}
           keyExtractor={(item) => item.name}
         />
-      </ScrollView>
+      </ScrollView> : <View style={{ flex: 1,justifyContent:"center", alignItems:"center"}}><Text variant="ingredients_item">Click a recipe to view it!</Text></View>}
     </SafeArea>
   );
 };

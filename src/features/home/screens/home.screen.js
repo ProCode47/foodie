@@ -111,34 +111,32 @@ export const HomeScreen = ({ navigation }) => {
   };
   const handleFavourite = async (link) => {
     try {
-      const api = await fetch(
-        `${link}`
-      );
+      const api = await fetch(`${link}`);
       const data = await api.json();
-      const favourites = await getData("Favourites")
+      const favourites = await getData("Favourites");
       if (favourites === null) {
-        const favourites = []
-        const updatedFavourites = favourites.push(data)
+        const updatedFavourites = [data];
         await storeData(updatedFavourites, "Favourites");
       }
-      const updatedFavourites = [...favourites,data]
+      const updatedFavourites = [...favourites, data];
       await storeData(updatedFavourites, "Favourites");
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
-  // const removeValue = async () => {
-  //   try {
-  //     await AsyncStorage.removeItem('Chinese')
-  //   } catch(e) {
-  //     // remove error
-  //   }
+  const removeValue = async () => {
+    try {
+      await AsyncStorage.removeItem("Favourites");
+    } catch (e) {
+      // remove error
+    }
 
-  //   console.log('Done.')
-  // }
+    console.log("Done.");
+  };
 
   useEffect(() => {
+    removeValue()
     getRecipeDisplay();
   }, []);
 
@@ -154,7 +152,7 @@ export const HomeScreen = ({ navigation }) => {
         </WelcomeBar>
         <Avatar.Image
           size={50}
-          style={{ backgroundColor: "#f9616300"}}
+          style={{ backgroundColor: "#f9616300" }}
           source={require("../../../../assets/avatarfemale.png")}
         />
       </HeaderRow>
@@ -231,7 +229,12 @@ export const HomeScreen = ({ navigation }) => {
                     style={{ height: "100%", width: "100%" }}
                   >
                     <View style={{ position: "absolute", top: 25, right: 15 }}>
-                      <Feather onPress={()=> handleFavourite(item._links.self.href)} name="heart" size={24} color={"#FFF"} />
+                      <Feather
+                        onPress={() => handleFavourite(item._links.self.href)}
+                        name="heart"
+                        size={24}
+                        color={"#FFF"}
+                      />
                     </View>
                     <View
                       style={{ position: "absolute", bottom: 15, left: 15 }}

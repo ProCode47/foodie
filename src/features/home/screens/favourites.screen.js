@@ -22,7 +22,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export const FavouriteScreen = ({ navigation, route }) => {
     const [recipeDisplay, setRecipeDisplay] = useState([]);
-    const [existingFavourites, setsetExistingFavourites] = useState(false);
+    const [existingFavourites, setExistingFavourites] = useState(false);
 
   const storeData = async (value, location) => {
     try {
@@ -46,17 +46,8 @@ export const FavouriteScreen = ({ navigation, route }) => {
   const getRecipeDisplay = async () => {
     const check = await getData("Favourites");
       if (check) {
-        console.log("Damnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-        console.log("Damnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-        console.log("Damnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-        console.log("Damnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-        console.log("Damnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-        console.log("Damnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-        console.log("Damnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
-      console.log(check)
         setRecipeDisplay(check);
         setExistingFavourites(true)
-
     } else {
       setExistingFavourites(false)
     }
@@ -85,10 +76,10 @@ export const FavouriteScreen = ({ navigation, route }) => {
            <HeaderRow>
         <Feather name="chevron-left" size={26} color={"#000"} />
         <Text variant="recipe_header">Favourites</Text>
-        <Feather name="more-vertical" size={26} color={"#000"} />
+        <Feather name="more-vertical" size={26} color={"#FFF"} />
       </HeaderRow>
       <Spacer position="top" size="large" />
-     { existingFavourites ? <FlatList
+{  existingFavourites ?   <FlatList
         data={recipeDisplay}
         renderItem={({ item }) => {
           return (
@@ -142,7 +133,7 @@ export const FavouriteScreen = ({ navigation, route }) => {
           );
         }}
         keyExtractor={(item) => item.recipe.label}
-      /> : <Text> No Favourites added yet! </Text>}
+      /> : <View style={{ flex: 1,justifyContent:"center", alignItems:"center"}}><Text variant="ingredients_item">No Favourites added yet!</Text></View>}
     </SafeArea>
   );
 };

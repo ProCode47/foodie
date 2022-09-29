@@ -47,7 +47,7 @@ export const RecipeScreen = ({ route, navigation }) => {
       <HeaderRow>
         <Feather name="chevron-left" size={26} color={"#000"} />
         <Text variant="recipe_header">Recipe</Text>
-        <Feather name="more-vertical" size={26} color={"#000"} />
+        <Feather name="more-vertical" size={26} color={"#FFF"} />
       </HeaderRow>
    { existingRecipe ?  <ScrollView>
         <RecipeImage>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeArea } from "../../../utility/safe-area";
 import { Text } from "../../../components/text";
 import { Spacer } from "../../../components/spacer";
@@ -20,7 +20,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { APP_ID, APP_KEY } from "@env";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+
 export const HomeScreen = ({ navigation }) => {
+
   const initialTagState = {
     Japanese: true,
     French: false,

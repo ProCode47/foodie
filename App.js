@@ -1,8 +1,8 @@
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import React from "react";
 import { ThemeProvider } from "styled-components/native";
-import 'react-native-gesture-handler'
+import "react-native-gesture-handler";
 
 import {
   useFonts as useSignikaNegative,
@@ -11,6 +11,7 @@ import {
 
 import { theme } from "./src/infrastructure/theme";
 import { Navigation } from "./src/infrastructure/navigation";
+import { FavouriteProvider } from "./src/features/home/context/favourite.context";
 
 export default function App() {
   // Load Fonts
@@ -18,18 +19,18 @@ export default function App() {
     SignikaNegative_400Regular,
   });
 
-
   if (!signikaNegativeLoaded) {
     return null;
   }
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <Navigation />
-      </ThemeProvider>
+      <FavouriteProvider>
+        <ThemeProvider theme={theme}>
+          <Navigation />
+        </ThemeProvider>
+      </FavouriteProvider>
       <ExpoStatusBar style="auto" />
     </>
   );
 }
-

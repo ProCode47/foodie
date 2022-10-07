@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.shadowbytee.readme"
+      "package": "com.shadowbytee.foodie"
     },
     "web": {
       "favicon": "./assets/favicon.png"

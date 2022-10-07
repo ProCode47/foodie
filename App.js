@@ -11,7 +11,6 @@ import {
 
 import { theme } from "./src/infrastructure/theme";
 import { Navigation } from "./src/infrastructure/navigation";
-import { FavouriteProvider } from "./src/features/home/context/favourite.context";
 
 export default function App() {
   // Load Fonts
@@ -25,11 +24,9 @@ export default function App() {
 
   return (
     <>
-      <FavouriteProvider>
         <ThemeProvider theme={theme}>
           <Navigation />
         </ThemeProvider>
-      </FavouriteProvider>
       <ExpoStatusBar style="auto" />
     </>
   );

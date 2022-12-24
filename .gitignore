@@ -13,3 +13,4 @@ web-build/
 req.rest
 # macOS
 .DS_Store
+.vscode

@@ -25,7 +25,6 @@ const splash_pink = (theme) => `
     font-size: 16px;
     font-weight: ${theme.fontWeights.bold};
     color: #F9616399;
-    margin-right:auto;
 `;
 
 const splash_button = (theme) => `
@@ -35,7 +34,7 @@ const splash_button = (theme) => `
 
 const splash_heading = (theme) => `
     padding:10px 0px 20px 0px;
-    font-size: 60px;
+    font-size: 40px;
     font-weight: ${theme.fontWeights.bold};
     color: #3C444C;
 `;
@@ -58,7 +57,6 @@ const mealtag = (theme) => `
     padding:10px 20px 10px 20px;
     border-radius:10px;
     background-color:#F3F3F3;
-    height:40px;
 `;
 const mealtag_active = (theme) => `
     font-size: 18px;
@@ -68,7 +66,6 @@ const mealtag_active = (theme) => `
     padding:10px 20px 10px 20px;
     border-radius:10px;
     background-color:${theme.colors.brand.primary}12;
-    height:40px;
 `;
 const card_rating = (theme) => `
     font-size: 25px;
@@ -132,28 +129,28 @@ const ingredients_item = (theme) => `
 `;
 
 const variants = {
-  body,
-  mealtag,
-  mealtag_active,
-  error,
-  hint,
-  splash_pink,
-  splash_button,
-  splash_heading,
-  welcomebar_caption,
-  welcomebar_heading,
-  card_rating,
-  card_heading,
-  card_timer,
-  recipe_header,
-  recipe_title,
-  recipe_info_text,
-  recipe_info_value,
-  recipe_summary,
-  ingredients_header,
+    body,
+    mealtag,
+    mealtag_active,
+    error,
+    hint,
+    splash_pink,
+    splash_button,
+    splash_heading,
+    welcomebar_caption,
+    welcomebar_heading,
+    card_rating,
+    card_heading,
+    card_timer,
+    recipe_header,
+    recipe_title,
+    recipe_info_text,
+    recipe_info_value,
+    recipe_summary,
+    ingredients_header,
     ingredients_item,
     ingredients_header_quantity,
-  
+
 };
 
 export const Text = styled.Text`
@@ -162,5 +159,5 @@ export const Text = styled.Text`
 `;
 
 Text.defaultProps = {
-  variant: "body",
+    variant: "body",
 };

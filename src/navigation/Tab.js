@@ -1,10 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
-import { colors } from "../../infrastructure/theme/colors";
-import { HomeScreen } from "../../features/home/screens/home.screen";
-import { FavouriteScreen } from "../../features/home/screens/favourites.screen";
-import { RecipeScreen } from "../../features/recipie/screens/recipe.screen";
+import { colors } from "../theme/colors";
+import { HomeScreen } from "../screens/Tab/Home";
+import { FavouriteScreen } from "../screens/Tab/Favourite";
+import { RecipeScreen } from "../screens/Tab/Recipe";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +17,8 @@ const TAB_ICON = {
 const createScreenOptions = ({ route }) => {
   const iconName = TAB_ICON[route.name];
   return {
+    tabBarActiveTintColor: colors.brand.primary,
+    tabBarInactiveTintColor: colors.brand.muted,
     tabBarIcon: ({ size, color }) => (
       <Feather name={iconName} size={size} color={color} />
     ),
@@ -35,23 +37,12 @@ const createScreenOptions = ({ route }) => {
   };
 };
 
-const Setting = () => {
-  return null;
-};
-const List = () => {
-  return null;
-};
-
-export const HomeNavigator = () => (
+export const TabNavigator = () => (
   <Tab.Navigator
     screenOptions={createScreenOptions}
-    tabBarOptions={{
-      activeTintColor: colors.brand.primary,
-      inactiveTintColor: colors.brand.muted,
-    }}
   >
     <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Recipe" component={RecipeScreen} />
-    <Tab.Screen name="Favourite" component={FavouriteScreen} options={{unmountOnBlur: true}}/>
+    <Tab.Screen name="Favourite" component={FavouriteScreen} options={{ unmountOnBlur: true }} />
   </Tab.Navigator>
 );

@@ -1,12 +1,9 @@
 import styled from "styled-components/native";
-import { Text } from "../../../components/text";
 import { Feather } from "@expo/vector-icons";
-import { colors } from "../../../infrastructure/theme/colors";
-import { Button, Card, Searchbar } from "react-native-paper";
-import { Dimensions, ScrollView } from "react-native";
-
-const DEVICE_WIDTH = Dimensions.get("window").width;
-const DEVICE_HEIGHT = Dimensions.get("window").height;
+import { colors } from "../../theme/colors";
+import { Searchbar } from "react-native-paper";
+import { ScrollView } from "react-native";
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../Header/styles";
 
 export const Header = styled.View`
   background-color: ${(props) => props.theme.colors.bg.primary};
@@ -23,16 +20,15 @@ export const MenuIcon = styled(Feather).attrs({
 })``;
 export const AnimationWrapper = styled.View`
   width: 100%;
-  height: 60%;
-  top: 0px;
+  height: 55%;
   padding: ${(props) => props.theme.space[2]};
-`;
+  `;
 export const SplashContainer = styled.View`
+  width: 100%;
+  height: 45%;
   flex-direction: column;
   align-items: center;
-  width: 60%;
   margin: 0 auto;
-  margin-top: -30px;
 `;
 
 export const SplashButton = styled.View`
@@ -49,10 +45,12 @@ export const HeaderRow = styled.View`
   padding: 10px 10px 0px 10px;
   flex-direction: row;
   justify-content: space-between;
+  alignItems: center;
   overflow: hidden;
 `;
 export const WelcomeBar = styled.View`
   flex-direction: column;
+  width: ${DEVICE_WIDTH - 70}px
 `;
 export const Search = styled(Searchbar).attrs({
   placeholder: "Search for recipes",

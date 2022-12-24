@@ -9,8 +9,8 @@ import {
   SignikaNegative_400Regular,
 } from "@expo-google-fonts/signika-negative";
 
-import { theme } from "./src/infrastructure/theme";
-import { Navigation } from "./src/infrastructure/navigation";
+import { theme } from "./src/theme";
+import { Navigation } from "./src/navigation";
 
 export default function App() {
   // Load Fonts
@@ -24,9 +24,9 @@ export default function App() {
 
   return (
     <>
-        <ThemeProvider theme={theme}>
-          <Navigation />
-        </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <Navigation />
+      </ThemeProvider>
       <ExpoStatusBar style="auto" />
     </>
   );

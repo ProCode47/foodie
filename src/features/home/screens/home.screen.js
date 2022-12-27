@@ -138,7 +138,7 @@ export const HomeScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    removeValue()
+    // removeValue()
     getRecipeDisplay();
   }, []);
 

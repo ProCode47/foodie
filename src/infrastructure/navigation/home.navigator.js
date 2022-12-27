@@ -9,7 +9,7 @@ import { RecipeScreen } from "../../features/recipie/screens/recipe.screen";
 const Tab = createBottomTabNavigator();
 
 const TAB_ICON = {
-  Home: "home",
+  Browse: "home",
   Recipe: "list",
   Favourite: "heart",
 };
@@ -50,7 +50,7 @@ export const HomeNavigator = () => (
       inactiveTintColor: colors.brand.muted,
     }}
   >
-    <Tab.Screen name="Home" component={HomeScreen} />
+    <Tab.Screen name="Browse" component={HomeScreen} />
     <Tab.Screen name="Recipe" component={RecipeScreen} />
     <Tab.Screen name="Favourite" component={FavouriteScreen} options={{unmountOnBlur: true}}/>
   </Tab.Navigator>

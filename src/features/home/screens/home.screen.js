@@ -70,7 +70,12 @@ export const HomeScreen = ({ navigation }) => {
     try {
       const api = await fetch(
         `https://api.edamam.com/api/recipes/v2?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&cuisineType=${tagname}`
-      );
+        , {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
       const data = await api.json();
       // console.log(data.results);
       setRecipeDisplay(data.hits);
@@ -87,7 +92,12 @@ export const HomeScreen = ({ navigation }) => {
     } else {
       try {
         const api = await fetch(
-          `https://api.edamam.com/api/recipes/v2?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&cuisineType=Japanese`
+          `https://api.edamam.com/api/recipes/v2?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&cuisineType=Japanese` , {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
         );
         const data = await api.json();
         // console.log(data.results);
@@ -102,7 +112,12 @@ export const HomeScreen = ({ navigation }) => {
     setRecipeDisplay([]);
     try {
       const api = await fetch(
-        `https://api.edamam.com/api/recipes/v2?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&q=${searchKeyword}`
+        `https://api.edamam.com/api/recipes/v2?type=public&app_id=${APP_ID}&app_key=${APP_KEY}&q=${searchKeyword}` , {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
       );
       const data = await api.json();
       // console.log(data.results);
